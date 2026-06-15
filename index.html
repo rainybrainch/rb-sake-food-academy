@@ -112,7 +112,11 @@ body{background:#0d1117;color:#e6edf3;font-family:'Zen Maru Gothic',sans-serif;m
     <div id="homeStats" class="stats-grid"></div>
     <div class="progress-bar-wrap"><div id="totalProgBar" class="progress-bar-fill" style="width:0%"></div></div>
     <div class="progress-text" id="totalProgText">0 / 0 レッスン完了</div>
-    <div class="section-label">コース一覧</div>
+    <div id="todayTip" style="background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);border-radius:10px;padding:13px 15px;margin-bottom:16px">
+    <div style="font-size:.6rem;font-weight:900;letter-spacing:.12em;color:#F5C842;margin-bottom:6px">🌟 今日の豆知識</div>
+    <div id="tipText" style="font-size:.8rem;line-height:1.6;color:rgba(255,255,255,.8)"></div>
+  </div>
+  <div class="section-label">コース一覧</div>
     <div id="courseList"></div>
   </div>
 </div>
@@ -460,6 +464,25 @@ function completeLesson(){
   toast('レッスン完了！🎉');
   renderLesson();
   renderHome();
+
+// Today's tip
+const TIPS=[
+  "日本酒の「冷や」は常温のこと。冷酒・常温・燗で全く違う味が楽しめます。",
+  "ワインのボトル底のくぼみは「パント」といい、澱を沈めたり持ちやすくするためのもの。",
+  "フランス料理のフルコースは前菜→スープ→魚→肉→デザートの順。カトラリーは外から使う。",
+  "日本酒の「純米」は醸造アルコールを加えていない。米と水だけで作る本来の日本酒。",
+  "シャンパンはフランスのシャンパーニュ地方産のスパークリングワインのみ。他地域はムスーと呼ぶ。",
+  "移し箸（箸から箸へ食べ物を渡す）は葬儀を連想させるため和食のタブー。",
+  "ソムリエの試飲は「おいしいか」ではなく「コルク臭など劣化がないか」の確認。",
+  "大吟醸は精米歩合50%以下。つまり米の半分以上を削り取った贅沢な日本酒。",
+  "中国では乾杯を「干杯（がんべい）」といい、ビジネスの場では飲み干すのが礼儀。",
+  "赤ワインのタンニンが肉料理に合う理由：タンニンが肉のタンパク質と結合し渋みが和らぐ。",
+  "日本酒の「辛口」は糖分が少なくドライな味わい。「辛い（スパイシー）」という意味ではない。",
+  "ぬる燗（40℃）は日本酒の旨みが最も膨らむ温度帯。食事との相性も最高。"
+];
+const tip=TIPS[new Date().getDate()%TIPS.length];
+const tipEl=document.getElementById('tipText');
+if(tipEl)tipEl.textContent=tip;
   // Refresh course list
   if(curCourse){
     const listEl=document.getElementById('lessonList');
@@ -489,6 +512,25 @@ function toast(msg){
 }
 
 renderHome();
+
+// Today's tip
+const TIPS=[
+  "日本酒の「冷や」は常温のこと。冷酒・常温・燗で全く違う味が楽しめます。",
+  "ワインのボトル底のくぼみは「パント」といい、澱を沈めたり持ちやすくするためのもの。",
+  "フランス料理のフルコースは前菜→スープ→魚→肉→デザートの順。カトラリーは外から使う。",
+  "日本酒の「純米」は醸造アルコールを加えていない。米と水だけで作る本来の日本酒。",
+  "シャンパンはフランスのシャンパーニュ地方産のスパークリングワインのみ。他地域はムスーと呼ぶ。",
+  "移し箸（箸から箸へ食べ物を渡す）は葬儀を連想させるため和食のタブー。",
+  "ソムリエの試飲は「おいしいか」ではなく「コルク臭など劣化がないか」の確認。",
+  "大吟醸は精米歩合50%以下。つまり米の半分以上を削り取った贅沢な日本酒。",
+  "中国では乾杯を「干杯（がんべい）」といい、ビジネスの場では飲み干すのが礼儀。",
+  "赤ワインのタンニンが肉料理に合う理由：タンニンが肉のタンパク質と結合し渋みが和らぐ。",
+  "日本酒の「辛口」は糖分が少なくドライな味わい。「辛い（スパイシー）」という意味ではない。",
+  "ぬる燗（40℃）は日本酒の旨みが最も膨らむ温度帯。食事との相性も最高。"
+];
+const tip=TIPS[new Date().getDate()%TIPS.length];
+const tipEl=document.getElementById('tipText');
+if(tipEl)tipEl.textContent=tip;
 </script>
 </body>
 </html>
