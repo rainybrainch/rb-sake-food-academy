@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RBお酒と食事のアカデミー</title>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#e6edf3;font-family:'Zen Maru Gothic',sans-serif;min-height:100vh;padding-bottom:80px}
+.header{background:rgba(13,17,23,.95);border-bottom:1px solid rgba(255,255,255,.06);padding:14px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.header-logo{font-family:'Dela Gothic One',sans-serif;font-size:1rem;background:linear-gradient(135deg,#F5C842,#E8354A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header-back{background:none;border:none;color:rgba(255,255,255,.5);font-size:.85rem;cursor:pointer;display:none;align-items:center;gap:4px;padding:4px 0}
+.header-back.show{display:flex}
+.scr{display:none;max-width:480px;margin:0 auto;padding:16px}
+.scr.active{display:block}
+.hero{text-align:center;padding:32px 16px 24px}
+.hero-icon{font-size:3rem;margin-bottom:12px}
+.hero-title{font-family:'Dela Gothic One',sans-serif;font-size:1.6rem;background:linear-gradient(135deg,#F5C842,#5BC8E8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.hero-sub{font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.6}
+.progress-bar-wrap{background:rgba(255,255,255,.06);border-radius:6px;height:6px;margin:20px 0 8px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,#F5C842,#4CAF7D);border-radius:6px;transition:width .5s}
+.progress-text{font-size:.65rem;color:rgba(255,255,255,.4);text-align:right;margin-bottom:20px}
+.section-label{font-size:.6rem;font-weight:900;letter-spacing:.15em;color:rgba(255,255,255,.3);margin:24px 0 10px;text-transform:uppercase}
+.course-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.course-card:hover{background:rgba(255,255,255,.07);border-color:rgba(245,200,66,.3)}
+.course-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.course-emoji{font-size:1.6rem}
+.course-title{font-weight:900;font-size:.95rem;line-height:1.3}
+.course-desc{font-size:.72rem;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:10px}
+.course-meta{display:flex;gap:8px;align-items:center}
+.badge{font-size:.6rem;padding:2px 8px;border-radius:20px;font-weight:700}
+.badge-gold{background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);color:#F5C842}
+.badge-sky{background:rgba(91,200,232,.12);border:1px solid rgba(91,200,232,.3);color:#5BC8E8}
+.badge-green{background:rgba(76,175,125,.12);border:1px solid rgba(76,175,125,.3);color:#4CAF7D}
+.badge-red{background:rgba(232,53,74,.12);border:1px solid rgba(232,53,74,.3);color:#E8354A}
+.course-prog{flex:1;margin-left:auto;text-align:right;font-size:.65rem;color:rgba(255,255,255,.4)}
+.lesson-list{margin-top:4px}
+.lesson-item{display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s}
+.lesson-item:hover{background:rgba(255,255,255,.06);border-color:rgba(245,200,66,.2)}
+.lesson-check{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem}
+.lesson-check.done{background:#4CAF7D;border-color:#4CAF7D}
+.lesson-title-wrap{flex:1}
+.lesson-title{font-size:.82rem;font-weight:700}
+.lesson-meta{font-size:.62rem;color:rgba(255,255,255,.35);margin-top:2px}
+.lesson-arrow{font-size:.8rem;color:rgba(255,255,255,.25)}
+.chapter-header{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.chapter-title{font-family:'Dela Gothic One',sans-serif;font-size:1.1rem;margin-bottom:4px;background:linear-gradient(135deg,#F5C842,#5BC8E8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.chapter-desc{font-size:.72rem;color:rgba(255,255,255,.45);line-height:1.5}
+.lesson-content{max-width:480px;margin:0 auto;padding:0 16px 16px}
+.section-info-box{background:rgba(91,200,232,.08);border:1px solid rgba(91,200,232,.2);border-radius:8px;padding:12px 14px;margin:14px 0;font-size:.8rem;color:rgba(255,255,255,.75);line-height:1.6}
+.section-text{font-size:.82rem;line-height:1.8;color:rgba(255,255,255,.8);margin:10px 0}
+.section-heading{font-family:'Dela Gothic One',sans-serif;font-size:1rem;color:#F5C842;margin:20px 0 8px;border-left:3px solid #F5C842;padding-left:10px}
+.highlight-box{background:rgba(76,175,125,.08);border:1px solid rgba(76,175,125,.2);border-radius:8px;padding:12px 14px;margin:12px 0}
+.highlight-box-title{font-weight:900;font-size:.75rem;color:#4CAF7D;margin-bottom:8px}
+.highlight-box ul{list-style:none;padding:0}
+.highlight-box li{font-size:.78rem;color:rgba(255,255,255,.75);padding:3px 0 3px 14px;position:relative;line-height:1.5}
+.highlight-box li::before{content:"✓";position:absolute;left:0;color:#4CAF7D;font-size:.7rem}
+.practice-box{background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);border-radius:8px;padding:14px;margin:14px 0}
+.practice-label{font-size:.62rem;font-weight:900;letter-spacing:.1em;color:#F5C842;margin-bottom:8px}
+.practice-q{font-size:.8rem;line-height:1.6;color:rgba(255,255,255,.85);margin-bottom:12px}
+.practice-btn{background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.4);color:#F5C842;font-size:.75rem;font-weight:700;padding:7px 14px;border-radius:6px;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;transition:all .2s}
+.practice-btn:hover{background:rgba(245,200,66,.25)}
+.practice-answer{display:none;margin-top:12px;padding:10px;background:rgba(255,255,255,.04);border-radius:6px;font-size:.78rem;line-height:1.6;color:rgba(255,255,255,.75)}
+.glossary-box{margin:14px 0}
+.glossary-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:8px}
+.glossary-item{background:rgba(255,255,255,.03);border-radius:6px;padding:10px 12px;margin-bottom:6px;border-left:2px solid #5BC8E8}
+.glossary-term{font-size:.78rem;font-weight:900;color:#5BC8E8;margin-bottom:4px}
+.glossary-def{font-size:.73rem;color:rgba(255,255,255,.65);line-height:1.5}
+.summary-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;margin:16px 0;text-align:center}
+.summary-icon{font-size:1.5rem;margin-bottom:8px}
+.summary-text{font-size:.82rem;line-height:1.6;color:rgba(255,255,255,.75);margin-bottom:10px}
+.summary-next{font-size:.7rem;color:rgba(255,255,255,.4);font-style:italic}
+.check-list{margin:14px 0}
+.check-label{font-size:.65rem;font-weight:900;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:8px}
+.check-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(255,255,255,.03);border-radius:6px;margin-bottom:5px;cursor:pointer;transition:all .2s}
+.check-item:hover{background:rgba(255,255,255,.06)}
+.check-item input[type=checkbox]{accent-color:#4CAF7D;width:16px;height:16px;cursor:pointer}
+.check-item label{font-size:.78rem;cursor:pointer;line-height:1.4}
+.nav-btns{display:flex;gap:8px;margin-top:20px}
+.nav-btn{flex:1;padding:12px;border-radius:8px;border:none;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s}
+.nav-btn-prev{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+.nav-btn-prev:hover{background:rgba(255,255,255,.12)}
+.nav-btn-next{background:linear-gradient(135deg,#F5C842,#4CAF7D);color:#0d1117}
+.nav-btn-next:hover{opacity:.9}
+.nav-btn:disabled{opacity:.3;cursor:default}
+.complete-btn{width:100%;padding:14px;background:linear-gradient(135deg,#4CAF7D,#5BC8E8);color:#0d1117;font-family:'Dela Gothic One',sans-serif;font-size:1rem;border:none;border-radius:10px;cursor:pointer;margin-top:16px;transition:all .2s}
+.complete-btn:hover{opacity:.9;transform:scale(1.01)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#4CAF7D;color:#0d1117;font-weight:900;font-size:.85rem;padding:10px 20px;border-radius:20px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stat-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;text-align:center}
+.stat-val{font-family:'Dela Gothic One',sans-serif;font-size:1.4rem;color:#F5C842}
+.stat-label{font-size:.62rem;color:rgba(255,255,255,.4);margin-top:2px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="header-back" id="backBtn" onclick="goBack()">← 戻る</button>
+  <div class="header-logo" id="headerLogo">🍶 RBお酒と食事のアカデミー</div>
+</div>
+
+<!-- HOME -->
+<div id="s0" class="scr active">
+  <div class="hero">
+    <div class="hero-icon">🍶🍷🍱</div>
+    <div class="hero-title">RBお酒と食事のアカデミー</div>
+    <div class="hero-sub">お酒の知識・料理とのペアリング・食文化を楽しく学ぼう</div>
+  </div>
+  <div style="max-width:480px;margin:0 auto;padding:0 16px">
+    <div id="homeStats" class="stats-grid"></div>
+    <div class="progress-bar-wrap"><div id="totalProgBar" class="progress-bar-fill" style="width:0%"></div></div>
+    <div class="progress-text" id="totalProgText">0 / 0 レッスン完了</div>
+    <div class="section-label">コース一覧</div>
+    <div id="courseList"></div>
+  </div>
+</div>
+
+<!-- COURSE -->
+<div id="s1" class="scr">
+  <div style="max-width:480px;margin:0 auto;padding:16px">
+    <div id="courseDetail"></div>
+    <div class="section-label">レッスン</div>
+    <div id="lessonList"></div>
+  </div>
+</div>
+
+<!-- LESSON -->
+<div id="s2" class="scr">
+  <div class="lesson-content" id="lessonContent"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='rb-sake-food';
+const COURSES=[
+  {
+    id:'sake',
+    emoji:'🍶',
+    title:'日本酒の世界',
+    desc:'日本酒の種類・製法・味わい方・料理との相性を体系的に学ぶ入門コース',
+    level:'入門',
+    badgeClass:'badge-gold',
+    lessons:[
+      {
+        id:'sake-1',
+        title:'日本酒の種類と特徴',
+        duration:'10分',
+        checkItems:['日本酒の主な種類（純米・吟醸・大吟醸）を区別できる','精米歩合の意味を理解した','甘口・辛口の違いがわかった'],
+        sections:[
+          {type:'info-box',content:'このレッスンでは、日本酒の基本的な分類と、それぞれの特徴を学びます。日本酒ラベルを見て選べるようになりましょう。'},
+          {type:'heading',content:'日本酒の特定名称酒'},
+          {type:'text',content:'日本酒には「特定名称酒」という分類があります。使う米の割合・精米歩合・醸造アルコールの添加有無によって名称が決まります。ラベルを見るだけで味の方向性がわかるようになります。'},
+          {type:'highlight-box',title:'代表的な特定名称酒',items:['純米酒：米・米麹・水だけで醸造。旨みとコクが豊か','吟醸酒：精米歩合60%以下。フルーティな香りが特徴','大吟醸：精米歩合50%以下。華やかで繊細な最高峰','純米大吟醸：米だけで作った大吟醸。すっきりした旨み']},
+          {type:'text',content:'精米歩合とは、玄米を削って残った割合のことです。40%なら60%を削り取った状態。削るほど雑味が減り、フルーティで華やかな味になります。ただしコストも上がります。'},
+          {type:'heading',content:'甘口・辛口の見分け方'},
+          {type:'text',content:'日本酒の甘辛度は「日本酒度」で表されます。マイナス（－）ほど甘口、プラス（＋）ほど辛口。ただしアミノ酸度（旨み成分）も味に大きく影響するため、数字だけで判断しないことが大切です。'},
+          {type:'practice',question:'「純米大吟醸・精米歩合40%・日本酒度+3」というラベルを見て、このお酒の特徴を3点挙げてみてください。',answer:'①純米：米・米麹・水のみで醸造のため旨みが豊か。②精米歩合40%：玄米の60%を削り取った最高峰の精米で、雑味が少なく華やかな吟醸香が期待できる。③日本酒度+3：やや辛口寄りで、すっきりとした後味が特徴。フルーティな香りとすっきり辛口のバランスが楽しめるプレミアムな酒といえる。'},
+          {type:'glossary',terms:[{term:'精米歩合',definition:'玄米を削って残った米の割合。40%なら60%を削ったということ。削るほど雑味が減り吟醸香が出やすくなるが、コストも上がる。'},{term:'吟醸造り',definition:'低温でゆっくり発酵させる製法。フルーティなエステル系の香り（吟醸香）が生まれ、繊細で複雑な味わいが生まれる。'},{term:'日本酒度',definition:'お酒の甘辛度を示す指標。プラスが辛口、マイナスが甘口。水より比重が低いとプラス、高いとマイナスになる。'}]},
+          {type:'summary',content:'日本酒は特定名称と精米歩合を見るだけで、ある程度の味の方向性が見えてきます。次は食事との合わせ方を学びましょう。',nextLesson:'次は日本酒と料理のペアリング'}
+        ]
+      },
+      {
+        id:'sake-2',
+        title:'日本酒と料理のペアリング',
+        duration:'12分',
+        checkItems:['料理の味わいと日本酒の相性の基本原則を理解した','「同調」と「対比」のペアリング手法を習得した','シーン別おすすめペアリングを3つ挙げられる'],
+        sections:[
+          {type:'info-box',content:'日本酒と料理を合わせるコツは「味の強さをそろえる」こと。繊細な料理には淡麗な酒、濃い料理には濃い酒がマッチします。'},
+          {type:'heading',content:'ペアリングの2大原則'},
+          {type:'text',content:'①「同調」：似た味同士を合わせる。旨みが強い料理には旨みの強い純米酒。さっぱりした刺し身には淡麗な吟醸酒。②「対比」：異なる味で引き立て合う。濃厚な煮物に辛口の酒を合わせると料理の甘みが際立ちます。'},
+          {type:'highlight-box',title:'おすすめペアリング早見表',items:['刺し身・白身魚 ＋ 大吟醸・純米吟醸（淡麗×淡白）','濃い煮物・しょうゆ味 ＋ 純米酒・本醸造（旨み×旨み）','チーズ・クリーム系 ＋ 古酒・にごり酒（コク×コク）','揚げ物・天ぷら ＋ 辛口純米（油を辛口でリセット）','デザート・甘い料理 ＋ 甘口純米・梅酒（甘み×甘み）']},
+          {type:'practice',question:'焼き鳥（タレ）に合う日本酒とその理由を、ペアリングの「同調」「対比」どちらかを使って説明してください。',answer:'焼き鳥（タレ）は甘辛いしょうゆ味が強いため、「同調」ペアリングなら旨みが豊かな純米酒（旨み×旨みで相乗効果）。「対比」ペアリングなら辛口の燗酒（タレの甘みを辛口がすっきりリセット）が合う。燗にすると旨みが増し、焼き鳥の香ばしさとも好相性。どちらも理にかなっており、好みで選ぶのが正解。'},
+          {type:'glossary',terms:[{term:'同調（シナジー）ペアリング',definition:'食べ物と飲み物の味の方向性を合わせる手法。旨み×旨み、甘み×甘みのように似た要素を重ねて相乗効果を生む。'},{term:'対比ペアリング',definition:'異なる方向性の味を組み合わせてバランスをとる手法。濃厚な料理に辛口のドリンクを合わせると、飲み物がリセット役となりくどさが消える。'},{term:'燗酒（かんざけ）',definition:'日本酒を温めて飲むこと。温度によって旨みや香りが変化する。ぬる燗（40℃）は旨みが増し、熱燗（50℃）は辛みが際立つ。'}]},
+          {type:'summary',content:'ペアリングに正解はありません。「同調」か「対比」かを意識するだけで、食事がぐっと豊かになります。',nextLesson:'次は日本酒の選び方・買い方'}
+        ]
+      },
+      {
+        id:'sake-3',
+        title:'日本酒の選び方・楽しみ方',
+        duration:'10分',
+        checkItems:['酒屋・飲食店での注文がスムーズにできる','温度と器による味の変化を説明できる','産地・蔵元の読み方がわかった'],
+        sections:[
+          {type:'info-box',content:'日本酒は温度・器・産地によって味わいが大きく変わります。知識を持つだけで選ぶ楽しさが何倍にもなります。'},
+          {type:'heading',content:'温度で変わる日本酒の世界'},
+          {type:'text',content:'日本酒は5〜55℃という広い温度帯で楽しめる飲み物です。冷酒は香りが引き締まり、燗酒は旨みが膨らみます。吟醸酒は冷や・常温が基本。純米酒は燗にすると旨みが増してさらに美味しくなることも。'},
+          {type:'highlight-box',title:'温度帯と楽しみ方',items:['雪冷え（5℃）：香りが穏やか・キレが最高峰','花冷え（10℃）：フルーティな香りが際立つ・吟醸系に最適','常温（20℃）：素の味がわかる・テイスティングの基準','ぬる燗（40℃）：旨みが膨らむ・食事と最も相性が良い','熱燗（50℃）：辛口がより辛く・シャープな後味']},
+          {type:'heading',content:'産地と蔵元の読み方'},
+          {type:'text',content:'日本酒の個性は産地の気候・水・米に大きく影響されます。新潟の「越後酒」はすっきり淡麗辛口、京都の「伏見酒」はやわらかく甘口、兵庫の「灘酒」は辛口でしっかりした男性的な味が特徴です。ラベルで産地を確認し、好みの地域を探してみましょう。'},
+          {type:'practice',question:'居酒屋で「旨みが強い純米酒を少し温めて飲みたい」と頼む場合、店員にどう伝えますか？具体的なセリフで答えてください。',answer:'「純米酒でぬる燗（40℃前後）でお願いします。旨みがしっかりしたものがあれば嬉しいです」と伝えるのが理想。産地が好みなら「新潟以外の、コクのある純米酒でぬる燗を」と補足するとさらに伝わりやすい。温度を「ぬる燗」という言葉で伝えるのがポイント。'},
+          {type:'glossary',terms:[{term:'花冷え・ぬる燗・熱燗',definition:'日本酒の温度帯の呼び方。花冷え（約10℃）ぬる燗（約40℃）熱燗（約50℃）と名称があり、温度によって全く異なる風味が楽しめる。'},{term:'地酒',definition:'特定の地域で生産された日本酒。気候・水・米・蔵人の技術が反映され、その土地の食文化に合うよう作られていることが多い。'}]},
+          {type:'summary',content:'日本酒の知識は「経験」と合わせることで深まります。まず1本、ラベルを見て選んでみましょう。',nextLesson:'次はワインと料理の世界へ'}
+        ]
+      }
+    ]
+  },
+  {
+    id:'wine',
+    emoji:'🍷',
+    title:'ワインと料理のマリアージュ',
+    desc:'赤・白・泡の特徴から料理との合わせ方まで。ソムリエ思考でワインを選ぶ力を養う',
+    level:'初級',
+    badgeClass:'badge-red',
+    lessons:[
+      {
+        id:'wine-1',
+        title:'ワインの基礎知識',
+        duration:'12分',
+        checkItems:['赤・白・ロゼ・泡ワインの違いを説明できる','産地ごとの特徴を3地域以上挙げられる','テイスティング用語（タンニン・酸味・余韻）を理解した'],
+        sections:[
+          {type:'info-box',content:'ワインを選ぶとき「なんとなく」で選んでいませんか？基礎知識を身につけると、自分の好みにぴったりの1本を見つける力がつきます。'},
+          {type:'heading',content:'ワインの4タイプ'},
+          {type:'text',content:'ワインは大きく4つに分類されます。赤ワイン（黒ブドウを果皮ごと発酵）、白ワイン（白ブドウ果汁のみ発酵）、ロゼワイン（果皮との接触時間が短い赤）、スパークリングワイン（炭酸入り・シャンパンはその最高峰）。'},
+          {type:'highlight-box',title:'タイプ別の特徴と食事の傾向',items:['赤ワイン：タンニン（渋み）が特徴。肉料理・チーズに合う','白ワイン：酸味・フルーティさが特徴。魚・鶏・サラダに','ロゼ：赤と白の中間。さっぱり系の料理・前菜に万能','スパークリング：食前酒・揚げ物・塩味スナックに最高']},
+          {type:'heading',content:'主要産地とスタイル'},
+          {type:'text',content:'フランス（ボルドー：重厚な赤 / ブルゴーニュ：繊細な赤・白）、イタリア（明るい酸味・食事との相性抜群）、新世界（チリ・オーストラリア：コスパが高くフルーティ）。産地を知ると価格帯と味の見当がつきます。'},
+          {type:'practice',question:'「本日のランチ：白身魚のグリル レモンソース添え」に合うワインを1本選ぶとしたら、何を選びますか？理由とともに答えてください。',answer:'白身魚にレモンソースならフレッシュな酸味のある白ワインが最適。例えばフランス・ロワール地方のミュスカデや、イタリアのピノ・グリージョ。清潔感のある酸味が魚の繊細な味を引き立てる。シャブリ（フランス）もクリーンな白で相性が良い。赤はタンニンが魚の味を壊すので避けるのが基本。'},
+          {type:'glossary',terms:[{term:'タンニン',definition:'赤ワインの渋みの成分。ブドウの果皮・種から溶け出す。タンパク質と結合するため、肉料理と合わせると渋みが和らぎお互いを引き立て合う。'},{term:'テロワール',definition:'ブドウが育つ土壌・気候・地形などの環境の総称。同じ品種でも産地が違えば全く異なる味になる——これがワインの面白さ。'},{term:'余韻（フィニッシュ）',definition:'ワインを飲んだ後に口の中に残る風味と感覚。良いワインは余韻が長く複雑。10秒以上続くものは高品質の証とされる。'}]},
+          {type:'summary',content:'ワインは産地・タイプ・価格帯の3軸で絞り込むと選びやすくなります。',nextLesson:'次は料理とのマリアージュを学ぶ'}
+        ]
+      },
+      {
+        id:'wine-2',
+        title:'料理とワインのマリアージュ',
+        duration:'14分',
+        checkItems:['マリアージュの3大原則を説明できる','「重さを合わせる」原則を料理で実践できる','アジア料理・和食にも合うワインを選べる'],
+        sections:[
+          {type:'info-box',content:'マリアージュ（フランス語で「結婚」）とは、ワインと料理が互いを高め合う組み合わせのこと。基本原則を知るとレストランでの注文が楽しくなります。'},
+          {type:'heading',content:'マリアージュの3大原則'},
+          {type:'text',content:'①重さを合わせる：軽い料理に軽いワイン、重い料理に重いワイン。②地域で合わせる：イタリア料理にイタリアワイン——産地の食と酒は進化的に合っている。③対比で引き立てる：脂っこい料理に高酸味のワインを合わせると口の中がリセットされる。'},
+          {type:'highlight-box',title:'料理別おすすめマリアージュ',items:['ステーキ（赤身） ＋ カベルネ・ソーヴィニョン（重い赤）','牡蠣・シーフード ＋ シャブリ・ソーヴィニョン・ブラン（ミネラル系白）','パスタ（トマト系） ＋ サンジョベーゼ（イタリア赤）','フォアグラ ＋ 貴腐ワイン・ソーテルヌ（甘口白）','チーズ（熟成） ＋ ポートワイン・バローロ（濃厚）']},
+          {type:'practice',question:'焼肉（牛カルビ・タレ）に合うワインを2種類選び、それぞれの理由を「マリアージュの3大原則」を使って説明してください。',answer:'①カベルネ・ソーヴィニョン（重い赤）：「重さを合わせる」原則。カルビの脂肪分にタンニンが結合して渋みが和らぎ相乗効果。②泡ワイン（スパークリング）：「対比」原則。炭酸と酸味が脂をリセットし次の一口をさっぱり迎えられる。タレの甘みとも泡の酸が好対比を生む。どちらも正解で、好みやシーンで選べる。'},
+          {type:'glossary',terms:[{term:'マリアージュ',definition:'フランス語で「結婚」。ワインと料理が互いの長所を引き出し合うベストな組み合わせのこと。対比・同調・地域性の3軸で考える。'},{term:'カベルネ・ソーヴィニョン',definition:'世界で最も有名な赤ワイン品種。フランス・ボルドーが原産。タンニンが豊富で力強く、熟成によって複雑なアロマを持つ。肉料理の王道ペア。'},{term:'ソーヴィニョン・ブラン',definition:'フレッシュな酸味とハーブのアロマが特徴の白ワイン品種。ニュージーランドのマールボロ産が有名。魚・野菜・ヤギチーズとの相性が抜群。'}]},
+          {type:'summary',content:'マリアージュは「正解」より「発見」を楽しむもの。失敗を恐れず試すことが上達の近道です。',nextLesson:'次は食事マナーと世界の食文化へ'}
+        ]
+      }
+    ]
+  },
+  {
+    id:'culture',
+    emoji:'🍱',
+    title:'食事マナーと世界の食文化',
+    desc:'日本のテーブルマナー・高級レストランでの振る舞い・世界各国の食文化を体系的に学ぶ',
+    level:'入門',
+    badgeClass:'badge-sky',
+    lessons:[
+      {
+        id:'culture-1',
+        title:'日本のテーブルマナー',
+        duration:'10分',
+        checkItems:['和食のタブーを5つ以上挙げられる','箸の正しい使い方の原則を説明できる','お椀・膳の配置の意味を理解した'],
+        sections:[
+          {type:'info-box',content:'日本のテーブルマナーは「食べ物への敬意」と「同席する人への配慮」から生まれています。禁じ手を知るだけで洗練された印象を与えられます。'},
+          {type:'heading',content:'箸使いのタブー'},
+          {type:'text',content:'箸使いには多くのタブーがあります。これらは仏教の葬儀の所作と被るため縁起が悪いとされるものや、食べ物を粗末にする行為として嫌われるものです。'},
+          {type:'highlight-box',title:'代表的な箸のタブー',items:['渡し箸：器の上に箸を横に置くこと（休憩のサインだが食事中はマナー違反）','刺し箸：料理を箸で突き刺して食べること','迷い箸：料理の上で箸を迷わせること（「目移り箸」とも）','移し箸：箸から箸へ食べ物を渡すこと（葬儀の火葬後を連想）','立て箸：ご飯に箸を立てること（仏事の供え物を連想）']},
+          {type:'heading',content:'和食の膳の配置と意味'},
+          {type:'text',content:'一汁三菜（いちじゅうさんさい）が和食の基本形式です。ご飯は左、汁物は右、お刺し身・煮物・焼き物が奥に並びます。左が上位（ご飯）とされるのは、左手で器を支えて右手で箸を使う動線からきています。'},
+          {type:'practice',question:'料亭に招待されました。目の前に並んだ料理を食べる順序の「基本的な考え方」を答えてください。',answer:'「淡い味から濃い味へ」が和食の基本順序。まず先付け（小鉢）でお酒の肴→吸い物（口をリセット）→刺し身→焼き物→煮物→ご飯・漬物・みそ汁→デザートの順が王道。濃い料理から食べると味覚が鈍くなるため、繊細な料理は先に。また、全部少しずつ食べ進める「均等食べ」が基本で、一つのものだけ先に食べ切る「くっつき食べ」はマナー違反。'},
+          {type:'glossary',terms:[{term:'一汁三菜',definition:'和食の基本的な献立の形式。ご飯・汁物（味噌汁など）・主菜（焼き魚など）・副菜（煮物・和え物）2品の組み合わせ。栄養バランスが自然にとれる構成。'},{term:'先付け',definition:'料亭などでコースの最初に出る一口サイズの料理。食前酒に合わせる肴として出され、料理全体の味の方向性を示すもの。'},{term:'懐石料理',definition:'茶道の茶会で茶の前に提供される料理。現在は高級コース料理の総称としても使われる。素材の味を活かしたシンプルな美しさが特徴。'}]},
+          {type:'summary',content:'マナーは知識だけでなく、「なぜそうするのか」を知ることで自然に身についていきます。',nextLesson:'次は高級レストランでの振る舞いを学ぶ'}
+        ]
+      },
+      {
+        id:'culture-2',
+        title:'高級レストランでの振る舞い',
+        duration:'12分',
+        checkItems:['コース料理のカトラリーの使い方がわかった','ソムリエとのやり取りの手順を説明できる','チップとお会計のマナーを国別に説明できる'],
+        sections:[
+          {type:'info-box',content:'フレンチ・イタリアン・高級和食…特別な席での振る舞いを知っておくと、接待・デートがぐっと洗練されます。'},
+          {type:'heading',content:'カトラリーの使い方'},
+          {type:'text',content:'コース料理のカトラリーは「外側から順番に使う」のが原則です。最初の料理に使うフォーク・ナイフが最も外側に配置されています。使い終えたカトラリーは皿の上に対角線状（右斜め）に置きます。'},
+          {type:'highlight-box',title:'カトラリーの合図',items:['「まだ食べています」：フォークとナイフをハの字に置く','「食べ終わりました」：フォークとナイフを揃えて斜めに置く','ナプキン：膝の上に広げる。食事中に離席する時は椅子の上に置く（終了時は無造作に）']},
+          {type:'heading',content:'ソムリエとのやり取り'},
+          {type:'text',content:'ソムリエはワイン選びのプロ。「料理・予算・好み」を伝えれば適切な1本を提案してくれます。ボトルが来たらラベルを確認し、グラスに注がれた少量を試飲します。問題なければ「はい、これで」と伝えればOK。試飲はおいしいかどうかではなく「劣化していないか」の確認です。'},
+          {type:'practice',question:'初めて行く高級フレンチで、ソムリエに「本日のコース料理に合うワインを予算8,000円で」と相談する際の自然な流れを答えてください。',answer:'「本日のコースに合うワインを1本、予算は8,000円前後でお願いしたいのですが」と伝える。ソムリエが好みを聞いてきたら「白でも赤でも大丈夫です。あまり渋くないものが好みです」などと答える。提案されたらラベルを確認し「ありがとうございます、それでお願いします」と。試飲時は口に含んでコルク臭や酢のような劣化がないか確認し「大丈夫です」と伝えれば完了。'},
+          {type:'glossary',terms:[{term:'カトラリー',definition:'食卓で使うナイフ・フォーク・スプーンの総称。西洋料理では外側から順に使い、使い終えたものは皿の上に揃えて置く。'},{term:'ソムリエ',definition:'ワインの専門知識を持ったレストランのスタッフ。ワインの提案・サービスの他、料理とのペアリング提案も担当。フランス語で「荷物係」が語源。'},{term:'ブショネ',definition:'コルク栓のカビによってワインが劣化した状態。カビ臭・湿った段ボールのような臭いが特徴。試飲でこれを確認するのがテイスティングの目的。'}]},
+          {type:'summary',content:'高級レストランは「緊張する場所」ではなく「最高のサービスを楽しむ場所」。知識があると余裕が生まれます。',nextLesson:'世界の食文化への好奇心を育てよう'}
+        ]
+      },
+      {
+        id:'culture-3',
+        title:'世界の食文化と日本の違い',
+        duration:'11分',
+        checkItems:['フランス・中国・インドの食文化の特徴を各1つ挙げられる','「食の文化的背景」の視点で料理を見られる','海外での食事マナーの違いを3点説明できる'],
+        sections:[
+          {type:'info-box',content:'食文化を知ることは、その国の歴史・宗教・価値観を理解することでもあります。海外旅行や外国人との食事がより豊かになります。'},
+          {type:'heading',content:'フランス食文化：美食の哲学'},
+          {type:'text',content:'フランスはユネスコ無形文化遺産に「フランスの美食術」が登録されています。食事は単なる栄養摂取ではなく、人々が集い会話を楽しむ「社交の芸術」とされます。コースの順序・食材の産地・シェフへの敬意——すべてが文化として根付いています。'},
+          {type:'highlight-box',title:'国別食文化の特徴',items:['フランス：美食を文化遺産として保護。コース料理・ワイン・チーズが三位一体','中国：「食は天下の楽しみの第一」。円卓で回しながら全員でシェア。乾杯は干杯（飲み干す）が礼儀','インド：宗教が食を決める。ヒンドゥー教＝牛肉禁止、イスラム教＝豚肉禁止。スパイスで体を整える食の医療的発想','日本：旬・産地・素材の味を活かす「引き算の美学」。もったいない精神と盛り付けの美']},
+          {type:'practice',question:'インドから来たヒンドゥー教徒のゲストを日本のレストランに招待します。注意すべき点を3つ答えてください。',answer:'①牛肉（ビーフ）料理は絶対避ける（ヒンドゥー教では牛は聖なる動物）。②ベジタリアンの方も多いため事前に確認する。③豚肉も避けたほうが安全（厳格な方もいる）。和食なら魚・豆腐・野菜中心の料理を選ぶ。事前に食の制限を直接確認するのが最もベストな対応。'},
+          {type:'glossary',terms:[{term:'食文化（フードカルチャー）',definition:'その地域・民族が形成してきた食べ物・食べ方・食事の慣習の総体。気候・宗教・歴史・農業形態が食文化を決定する。'},{term:'干杯（がんべい）',definition:'中国語で乾杯のこと。「杯を干す（飲み干す）」の意味。ビジネスの場では飲み干すのが礼儀とされることが多い。近年は健康意識から少し口をつけるだけでもよいという風潮も。'},{term:'ユネスコ無形文化遺産（食関連）',definition:'ユネスコが認定する無形の文化的価値を持つ習慣・実践・表現の記録。和食（2013年）・フランスの美食術・地中海料理などが登録されている。'}]},
+          {type:'summary',content:'食は最も身近な文化です。食事を通じて世界が広がります。このアカデミーで得た知識を、ぜひリアルな食事の場で試してみてください。',nextLesson:'全コース修了！引き続き探求を'}
+        ]
+      }
+    ]
+  }
+];
+
+// State
+let state=JSON.parse(localStorage.getItem(KEY)||'{"done":{}}');
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function isDone(lid){return!!(state.done&&state.done[lid]);}
+function markDone(lid){if(!state.done)state.done={};state.done[lid]=true;save();}
+
+let curCourse=null,curLesson=null,stack=[];
+
+function show(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const back=document.getElementById('backBtn');
+  back.classList.toggle('show', id!=='s0');
+  window.scrollTo(0,0);
+}
+
+function goBack(){
+  if(stack.length){show(stack.pop());}
+  else{show('s0');}
+}
+
+function getTotalProgress(){
+  let total=0,done=0;
+  COURSES.forEach(c=>c.lessons.forEach(l=>{total++;if(isDone(l.id))done++;}));
+  return{total,done};
+}
+
+function renderHome(){
+  const {total,done}=getTotalProgress();
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('totalProgBar').style.width=pct+'%';
+  document.getElementById('totalProgText').textContent=done+' / '+total+' レッスン完了';
+
+  const statsEl=document.getElementById('homeStats');
+  statsEl.innerHTML=`
+    <div class="stat-card"><div class="stat-val">${COURSES.length}</div><div class="stat-label">コース数</div></div>
+    <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">総レッスン数</div></div>
+    <div class="stat-card"><div class="stat-val">${done}</div><div class="stat-label">完了レッスン</div></div>
+    <div class="stat-card"><div class="stat-val">${pct}%</div><div class="stat-label">全体進捗</div></div>
+  `;
+
+  const listEl=document.getElementById('courseList');
+  listEl.innerHTML=COURSES.map(c=>{
+    const cDone=c.lessons.filter(l=>isDone(l.id)).length;
+    const cPct=Math.round(cDone/c.lessons.length*100);
+    return`<div class="course-card" onclick="openCourse('${c.id}')">
+      <div class="course-header">
+        <div class="course-emoji">${c.emoji}</div>
+        <div><div class="course-title">${c.title}</div></div>
+      </div>
+      <div class="course-desc">${c.desc}</div>
+      <div class="course-meta">
+        <span class="badge ${c.badgeClass}">${c.level}</span>
+        <span class="badge badge-sky">${c.lessons.length}レッスン</span>
+        <span class="course-prog">${cDone}/${c.lessons.length} 完了</span>
+      </div>
+      <div class="progress-bar-wrap" style="margin:10px 0 0;height:3px"><div class="progress-bar-fill" style="width:${cPct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function openCourse(cid){
+  curCourse=COURSES.find(c=>c.id===cid);
+  if(!curCourse)return;
+  stack.push('s0');
+  const el=document.getElementById('courseDetail');
+  el.innerHTML=`<div class="chapter-header">
+    <div style="font-size:2rem;margin-bottom:6px">${curCourse.emoji}</div>
+    <div class="chapter-title">${curCourse.title}</div>
+    <div class="chapter-desc">${curCourse.desc}</div>
+  </div>`;
+
+  const listEl=document.getElementById('lessonList');
+  listEl.innerHTML=curCourse.lessons.map((l,i)=>{
+    const done=isDone(l.id);
+    return`<div class="lesson-item" onclick="openLesson('${l.id}')">
+      <div class="lesson-check ${done?'done':''}">${done?'✓':i+1}</div>
+      <div class="lesson-title-wrap">
+        <div class="lesson-title">${l.title}</div>
+        <div class="lesson-meta">🕐 ${l.duration} · ${done?'✅ 完了':'未完了'}</div>
+      </div>
+      <div class="lesson-arrow">›</div>
+    </div>`;
+  }).join('');
+  show('s1');
+}
+
+function openLesson(lid){
+  if(!curCourse)return;
+  curLesson=curCourse.lessons.find(l=>l.id===lid);
+  if(!curLesson)return;
+  stack.push('s1');
+  renderLesson();
+  show('s2');
+}
+
+function renderLesson(){
+  const l=curLesson;
+  const lIdx=curCourse.lessons.findIndex(x=>x.id===l.id);
+  const prev=lIdx>0?curCourse.lessons[lIdx-1]:null;
+  const nextL=lIdx<curCourse.lessons.length-1?curCourse.lessons[lIdx+1]:null;
+
+  let html=`<div style="margin-bottom:16px">
+    <div style="font-size:.6rem;color:rgba(255,255,255,.35);margin-bottom:4px">${curCourse.emoji} ${curCourse.title}</div>
+    <div style="font-family:'Dela Gothic One',sans-serif;font-size:1.1rem;line-height:1.3;margin-bottom:4px">${l.title}</div>
+    <div style="font-size:.65rem;color:rgba(255,255,255,.35)">🕐 ${l.duration}${isDone(l.id)?' · ✅ 完了':''}</div>
+  </div>`;
+
+  // Sections
+  l.sections.forEach(s=>{
+    if(s.type==='info-box'){html+=`<div class="section-info-box">💡 ${s.content}</div>`;}
+    else if(s.type==='heading'){html+=`<div class="section-heading">${s.content}</div>`;}
+    else if(s.type==='text'){html+=`<div class="section-text">${s.content}</div>`;}
+    else if(s.type==='highlight-box'){html+=`<div class="highlight-box"><div class="highlight-box-title">📋 ${s.title}</div><ul>${s.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`;}
+    else if(s.type==='practice'){
+      const pid='prac_'+l.id+'_'+Math.random().toString(36).slice(2,6);
+      html+=`<div class="practice-box">
+        <div class="practice-label">🖊 練習問題</div>
+        <div class="practice-q">${s.question}</div>
+        <button class="practice-btn" onclick="document.getElementById('${pid}').style.display='block';this.style.display='none'">答えを見る</button>
+        <div class="practice-answer" id="${pid}">💡 ${s.answer}</div>
+      </div>`;
+    }
+    else if(s.type==='glossary'){
+      html+=`<div class="glossary-box"><div class="glossary-title">📖 用語集</div>${s.terms.map(t=>`<div class="glossary-item"><div class="glossary-term">${t.term}</div><div class="glossary-def">${t.definition}</div></div>`).join('')}</div>`;
+    }
+    else if(s.type==='summary'){
+      html+=`<div class="summary-box"><div class="summary-icon">🎯</div><div class="summary-text">${s.content}</div>${s.nextLesson?`<div class="summary-next">→ ${s.nextLesson}</div>`:''}</div>`;
+    }
+  });
+
+  // Check items
+  if(l.checkItems&&l.checkItems.length){
+    html+=`<div class="check-list"><div class="check-label">✅ 理解度チェック</div>${l.checkItems.map((item,i)=>{
+      const cid='chk_'+l.id+'_'+i;
+      return`<div class="check-item"><input type="checkbox" id="${cid}"><label for="${cid}">${item}</label></div>`;
+    }).join('')}</div>`;
+  }
+
+  // Complete button
+  if(!isDone(l.id)){
+    html+=`<button class="complete-btn" onclick="completeLesson()">🎉 レッスンを完了する</button>`;
+  }else{
+    html+=`<div style="text-align:center;padding:14px;color:#4CAF7D;font-weight:700;font-size:.9rem">✅ このレッスンは完了済みです</div>`;
+  }
+
+  // Nav buttons
+  html+=`<div class="nav-btns">
+    <button class="nav-btn nav-btn-prev" onclick="${prev?`openLesson('${prev.id}')`:'goBack()'}" >${prev?'← 前のレッスン':'← コースに戻る'}</button>
+    ${nextL?`<button class="nav-btn nav-btn-next" onclick="openLesson('${nextL.id}')">次のレッスン →</button>`:''}
+  </div>`;
+
+  document.getElementById('lessonContent').innerHTML=html;
+}
+
+function completeLesson(){
+  if(!curLesson)return;
+  markDone(curLesson.id);
+  toast('レッスン完了！🎉');
+  renderLesson();
+  renderHome();
+  // Refresh course list
+  if(curCourse){
+    const listEl=document.getElementById('lessonList');
+    if(listEl){
+      listEl.innerHTML=curCourse.lessons.map((l,i)=>{
+        const done=isDone(l.id);
+        return`<div class="lesson-item" onclick="openLesson('${l.id}')">
+          <div class="lesson-check ${done?'done':''}">${done?'✓':i+1}</div>
+          <div class="lesson-title-wrap">
+            <div class="lesson-title">${l.title}</div>
+            <div class="lesson-meta">🕐 ${l.duration} · ${done?'✅ 完了':'未完了'}</div>
+          </div>
+          <div class="lesson-arrow">›</div>
+        </div>`;
+      }).join('');
+    }
+  }
+}
+
+let toastTimer=null;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.classList.add('show');
+  if(toastTimer)clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2500);
+}
+
+renderHome();
+</script>
+</body>
+</html>
